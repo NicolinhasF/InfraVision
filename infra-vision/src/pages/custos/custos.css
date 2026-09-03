@@ -1,0 +1,32 @@
+.custos-donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.custos-legend-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.custos-legend-list li {
+  display: flex;
+  align-items: center;
+  font-size: 12.5px;
+}
+
+.custos-legend-name {
+  flex: 1;
+  color: var(--text-secondary);
+  margin-left: 2px;
+}
+
+.custos-legend-value {
+  color: var(--text-primary);
+  font-weight: 600;
+}

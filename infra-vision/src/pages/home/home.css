@@ -1,0 +1,149 @@
+.dash-legend {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.dash-donut-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.dash-donut-center {
+  position: absolute;
+  left: 75px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dash-donut-total {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.dash-donut-total-label {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+.dash-status-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.dash-status-list li {
+  display: flex;
+  align-items: center;
+  font-size: 12.5px;
+}
+
+.dash-status-name {
+  color: var(--text-secondary);
+  flex: 1;
+  margin-left: 2px;
+}
+
+.dash-status-count {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.dash-alert-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dash-alert-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.dash-alert-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-alert-title {
+  font-size: 12.5px;
+  color: var(--text-primary);
+}
+
+.dash-alert-date {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.icon-critico {
+  color: var(--status-critico);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.icon-atencao {
+  color: var(--status-atencao);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.dash-economia-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--status-normal);
+  margin: 4px 0 0;
+}
+
+.dash-economia-value span {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.dash-economia-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 4px 0 10px;
+}
+
+.dash-prev-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.dash-prev-server {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dash-prev-desc {
+  margin: 2px 0;
+  font-size: 12px;
+  color: var(--status-critico);
+}
+
+.dash-prev-meta {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
