@@ -1,0 +1,131 @@
+.analises-tabs {
+  display: flex;
+  gap: 6px;
+  border-bottom: 1px solid var(--border-color-soft);
+  padding-bottom: 2px;
+}
+
+.analises-tab {
+  background: none;
+  border: none;
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  border-bottom: 2px solid transparent;
+}
+
+.analises-tab:hover {
+  color: var(--text-primary);
+}
+
+.analises-tab-active {
+  color: var(--accent-blue);
+  border-bottom-color: var(--accent-blue);
+  font-weight: 600;
+}
+
+.analises-row {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 16px;
+}
+
+.analises-list-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.analises-item {
+  display: flex;
+  gap: 10px;
+}
+
+.analises-item-servidor {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.analises-item-desc {
+  margin: 3px 0 8px;
+  font-size: 12px;
+  color: var(--status-critico);
+}
+
+.analises-item-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.analises-nivel-track {
+  flex: 1;
+  max-width: 160px;
+}
+
+.analises-nivel-valor {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.analises-resumo-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.analises-donut-wrap {
+  position: relative;
+}
+
+.analises-donut-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.analises-donut-total {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.analises-donut-total-label {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.analises-resumo-list {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.analises-resumo-list li {
+  display: flex;
+  align-items: center;
+  font-size: 12.5px;
+}
+
+.analises-resumo-name {
+  flex: 1;
+  color: var(--text-secondary);
+  margin-left: 2px;
+}
+
+.analises-resumo-count {
+  color: var(--text-primary);
+  font-weight: 600;
+}
