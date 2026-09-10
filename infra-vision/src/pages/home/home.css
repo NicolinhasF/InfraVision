@@ -1,149 +1,369 @@
-.dash-legend {
-  display: flex;
-  align-items: center;
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-bottom: 4px;
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+.home {
+  --mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  gap: 22px;
 }
 
-.dash-donut-wrap {
-  position: relative;
+.home-strip {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  align-items: baseline;
+  gap: 0;
+  padding: 18px 4px;
+  border-top: 1px solid var(--border-color-soft);
+  border-bottom: 1px solid var(--border-color-soft);
 }
 
-.dash-donut-center {
-  position: absolute;
-  left: 75px;
-  top: 50%;
-  transform: translate(-50%, -50%);
+.home-metric {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 4px;
+  padding: 0 26px;
+  border-left: 1px solid var(--border-color-soft);
 }
 
-.dash-donut-total {
-  font-size: 22px;
-  font-weight: 700;
+.home-metric:first-child {
+  padding-left: 4px;
+  border-left: none;
+}
+
+.home-metric-value {
+  font-family: var(--mono);
+  font-size: 23px;
+  font-weight: 500;
   color: var(--text-primary);
+  letter-spacing: -0.01em;
 }
 
-.dash-donut-total-label {
-  font-size: 10.5px;
+.home-metric-value small {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-left: 1px;
+}
+
+.home-metric-money {
+  font-size: 19px;
+}
+
+.home-metric-label {
+  font-size: 11.5px;
   color: var(--text-muted);
 }
 
-.dash-status-list {
-  list-style: none;
+.home-live {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  padding-right: 4px;
+  white-space: nowrap;
+}
+
+.home-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--status-normal);
+  box-shadow: 0 0 0 3px var(--status-normal-soft);
+}
+
+/* ---- Painéis genéricos (mais discretos que o .card padrão) ---- */
+
+.home-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color-soft);
+  border-radius: 6px;
+  padding: 18px 20px;
+}
+
+.home-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.home-panel-head h2 {
   margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.home-panel-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-color-soft);
+  padding-top: 12px;
+  width: 100%;
+}
+
+.home-panel-link:hover {
+  color: var(--accent-blue);
+}
+
+/* ---- Gráfico + leitura inline (substitui a legenda em bolinhas) ---- */
+
+.home-main-grid {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 14px;
+}
+
+.home-readout {
+  display: flex;
+  gap: 16px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.home-readout-item strong {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.home-readout-cpu strong {
+  color: var(--chart-cpu);
+}
+
+.home-readout-ram strong {
+  color: var(--chart-ram);
+}
+
+/* ---- Saúde da frota: barra segmentada, não donut ---- */
+
+.home-panel-health {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-health-total {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.home-health-total span {
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.home-health-total p {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.home-health-bar {
+  display: flex;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--bg-input);
+  gap: 2px;
+}
+
+.home-health-segmento {
+  display: block;
+  min-width: 3px;
+}
+
+.home-health-normal {
+  background: var(--status-normal);
+}
+
+.home-health-atencao {
+  background: var(--status-atencao);
+}
+
+.home-health-critico {
+  background: var(--status-critico);
+}
+
+.home-health-legend {
+  list-style: none;
+  margin: 16px 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  flex: 1;
+  gap: 9px;
 }
 
-.dash-status-list li {
+.home-health-legend li {
   display: flex;
   align-items: center;
+  gap: 8px;
   font-size: 12.5px;
-}
-
-.dash-status-name {
   color: var(--text-secondary);
-  flex: 1;
-  margin-left: 2px;
 }
 
-.dash-status-count {
+.home-health-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ---- Linha inferior: log de alertas + coluna lateral ---- */
+
+.home-lower-grid {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.home-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.home-log li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border-color-soft);
+  font-size: 13px;
+}
+
+.home-log li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.home-log-time {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  width: 68px;
+  flex-shrink: 0;
+}
+
+.home-log-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.home-log-dot-critico {
+  background: var(--status-critico);
+  box-shadow: 0 0 0 3px var(--status-critico-soft);
+}
+
+.home-log-dot-atencao {
+  background: var(--status-atencao);
+  box-shadow: 0 0 0 3px var(--status-atencao-soft);
+}
+
+.home-log-text {
+  color: var(--text-secondary);
+}
+
+.home-log-text strong {
   color: var(--text-primary);
   font-weight: 600;
 }
 
-.dash-alert-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.home-log-vazio {
+  color: var(--text-muted);
+  font-size: 12.5px;
+  padding: 6px 0;
+}
+
+.home-side-col {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-.dash-alert-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
+/* ---- Economia: um número grande, sem gráfico de sparkline decorativo ---- */
+
+.home-panel-economia {
+  border-left: 2px solid var(--status-normal);
 }
 
-.dash-alert-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.dash-alert-title {
-  font-size: 12.5px;
-  color: var(--text-primary);
-}
-
-.dash-alert-date {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-.icon-critico {
-  color: var(--status-critico);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.icon-atencao {
-  color: var(--status-atencao);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.dash-economia-value {
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--status-normal);
-  margin: 4px 0 0;
-}
-
-.dash-economia-value span {
-  font-size: 13px;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-.dash-economia-sub {
+.home-economia-label {
+  margin: 0 0 6px;
   font-size: 12px;
   color: var(--text-secondary);
-  margin: 4px 0 10px;
 }
 
-.dash-prev-item {
+.home-economia-valor {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 27px;
+  font-weight: 500;
+  color: var(--status-normal);
+}
+
+.home-economia-nota {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ---- Previsão: nota compacta, não card idêntico aos outros ---- */
+
+.home-panel-previsao {
+  border-left: 2px solid var(--status-critico);
+}
+
+.home-previsao-head {
   display: flex;
-  gap: 10px;
-  align-items: flex-start;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
 }
 
-.dash-prev-server {
+.home-previsao-texto {
   margin: 0;
   font-size: 13px;
-  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.home-previsao-texto strong {
   color: var(--text-primary);
 }
 
-.dash-prev-desc {
-  margin: 2px 0;
-  font-size: 12px;
+.home-previsao-prob {
+  margin: 8px 0 0;
+  font-family: var(--mono);
+  font-size: 11px;
   color: var(--status-critico);
 }
 
-.dash-prev-meta {
-  margin: 0;
-  font-size: 11.5px;
-  color: var(--text-muted);
+/* ---- Telas estreitas ---- */
+
+@media (max-width: 900px) {
+  .home-main-grid,
+  .home-lower-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-strip {
+    flex-wrap: wrap;
+    row-gap: 14px;
+  }
+
+  .home-live {
+    margin-left: 0;
+    width: 100%;
+  }
 }

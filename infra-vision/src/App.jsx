@@ -11,21 +11,20 @@ import Recomendacoes from './pages/recomendacoes/Recomendacoes';
 import Custos from './pages/custos/Custos';
 import Configuracoes from './pages/configuracoes/Configuracoes';
 import Login from './pages/login/Login';
+import NotFound from './pages/404/NotFound';
 import './App.css';
 
-// Layout usado nas páginas internas (tudo que tem sidebar).
-// O Login não passa por aqui, porque a tela dele não tem sidebar.
 function AppLayout() {
   const navigate = useNavigate();
 
   function handleLogout() {
-    // TODO: limpar sessão/token antes de redirecionar
     navigate('/login');
   }
 
   return (
     <div className="app-layout">
       <Sidebar onLogout={handleLogout} />
+
       <div className="app-layout-content">
         <Outlet />
         <Footer />
@@ -38,8 +37,11 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* Login */}
         <Route path="/login" element={<Login />} />
 
+        {/* Páginas internas */}
         <Route element={<AppLayout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/servidores" element={<Servidores />} />
@@ -51,7 +53,9 @@ export default function App() {
           <Route path="/configuracoes" element={<Configuracoes />} />
         </Route>
 
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        {/* Qualquer rota inexistente */}
+        <Route path="*" element={<NotFound />} />
+
       </Routes>
     </BrowserRouter>
   );

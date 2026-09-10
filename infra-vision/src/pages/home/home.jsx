@@ -1,209 +1,273 @@
 import React from 'react';
 import {
   ResponsiveContainer,
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  PieChart,
-  Pie,
-  Cell,
 } from 'recharts';
-import { Server, Cpu, MemoryStick, Wallet, AlertTriangle, TrendingUp, PiggyBank } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import Navbar from '../../components/navbar';
-import StatCard from '../../components/statCard';
+import LoadingState from '../../components/LoadingState';
+import ErrorState from '../../components/ErrorState';
+import { useFetch } from '../../hooks/useFetch';
+import { dashboardService } from '../../services/dashboardService';
 import './Home.css';
 
-// ---- dados de exemplo — troque pela sua API ----
-const utilizacaoData = [
-  { hora: '18:00', cpu: 42, ram: 55 },
-  { hora: '20:00', cpu: 38, ram: 58 },
-  { hora: '22:00', cpu: 55, ram: 62 },
-  { hora: '00:00', cpu: 48, ram: 60 },
-  { hora: '02:00', cpu: 60, ram: 66 },
-  { hora: '04:00', cpu: 52, ram: 64 },
-  { hora: '06:00', cpu: 65, ram: 70 },
-  { hora: '08:00', cpu: 58, ram: 68 },
-  { hora: '10:00', cpu: 70, ram: 74 },
-  { hora: '12:00', cpu: 62, ram: 71 },
-  { hora: '14:00', cpu: 56, ram: 64 },
-];
-
-const statusData = [
-  { name: 'Normal', value: 14, color: 'var(--status-normal)' },
-  { name: 'Atenção', value: 6, color: 'var(--status-atencao)' },
-  { name: 'Crítico', value: 4, color: 'var(--status-critico)' },
-];
-
-const alertas = [
-  { servidor: 'SRV-02', descricao: 'CPU acima de 90%', data: 'Hoje, 14:29', nivel: 'critico' },
-  { servidor: 'SRV-07', descricao: 'RAM acima de 85%', data: 'Hoje, 13:48', nivel: 'atencao' },
-  { servidor: 'SRV-11', descricao: 'Disco acima de 90%', data: 'Hoje, 12:55', nivel: 'critico' },
-];
-
-const economiaData = [4, 6, 5, 7, 6, 8, 7, 9];
-
 export default function Home() {
+  const resumo = useFetch(() => dashboardService.getResumo(), []);
+  const utilizacao = useFetch(() => dashboardService.getUtilizacao('24h'), []);
+  const statusServidores = useFetch(() => dashboardService.getStatusServidores(), []);
+  const alertas = useFetch(() => dashboardService.getAlertas(), []);
+  const economia = useFetch(() => dashboardService.getEconomiaPotencial(), []);
+  const previsao = useFetch(() => dashboardService.getPrevisaoImportante(), []);
+
+  const statusTotal =
+    statusServidores.data?.total ??
+    (statusServidores.data
+      ? statusServidores.data.normal + statusServidores.data.atencao + statusServidores.data.critico
+      : 0);
+
+  const segmentos = statusServidores.data
+    ? [
+        { chave: 'normal', rotulo: 'operando normal', valor: statusServidores.data.normal },
+        { chave: 'atencao', rotulo: 'em atenção', valor: statusServidores.data.atencao },
+        { chave: 'critico', rotulo: 'em estado crítico', valor: statusServidores.data.critico },
+      ]
+    : [];
+
   return (
     <>
       <Navbar title="Dashboard" />
 
-      <div className="page">
-        {/* Cards de estatísticas */}
-        <div className="stats-row">
-          <StatCard
-            label="Servidores"
-            value="24"
-            sublabel="Total monitorado"
-            icon={<Server size={18} />}
-            iconBg="var(--accent-blue-soft)"
-            iconColor="var(--accent-blue)"
-          />
-          <StatCard
-            label="CPU média"
-            value="56%"
-            sublabel="Utilização atual"
-            icon={<Cpu size={18} />}
-            iconBg="var(--status-atencao-soft)"
-            iconColor="var(--status-atencao)"
-          />
-          <StatCard
-            label="RAM média"
-            value="64%"
-            sublabel="Utilização atual"
-            icon={<MemoryStick size={18} />}
-            iconBg="var(--status-roxo-soft)"
-            iconColor="var(--status-roxo)"
-          />
-          <StatCard
-            label="Custo mensal"
-            value="R$ 8.420"
-            sublabel="Custo atual"
-            icon={<Wallet size={18} />}
-            iconBg="var(--status-normal-soft)"
-            iconColor="var(--status-normal)"
-          />
-        </div>
-
-        {/* Gráfico de utilização + status dos servidores */}
-        <div className="row-2col">
-          <div className="card">
-            <h2 className="card-title">Utilização da infraestrutura (últimas 24h)</h2>
-            <div className="dash-legend">
-              <span className="legend-dot" style={{ background: 'var(--chart-cpu)' }} /> CPU
-              <span className="legend-dot" style={{ background: 'var(--chart-ram)', marginLeft: 16 }} /> RAM
+      <div className="page home">
+        {/* Faixa de status — sem cards, sem ícones em caixinha, números em mono */}
+        {resumo.loading && <LoadingState label="Carregando resumo..." />}
+        {resumo.error && <ErrorState error={resumo.error} onRetry={resumo.refetch} />}
+        {resumo.data && (
+          <section className="home-strip">
+            <div className="home-metric">
+              <span className="home-metric-value">{resumo.data.servidores}</span>
+              <span className="home-metric-label">servidores sob monitoramento</span>
             </div>
-            <ResponsiveContainer width="100%" height={210}>
-              <LineChart data={utilizacaoData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid stroke="var(--border-color-soft)" vertical={false} />
-                <XAxis dataKey="hora" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} unit="%" />
-                <Tooltip
-                  contentStyle={{
-                    background: 'var(--bg-card)',
-                    border: '1px solid var(--border-color)',
-                    borderRadius: 8,
-                    fontSize: 12,
-                  }}
-                />
-                <Line type="monotone" dataKey="cpu" stroke="var(--chart-cpu)" strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="ram" stroke="var(--chart-ram)" strokeWidth={2} dot={false} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div className="card">
-            <h2 className="card-title">Status dos servidores</h2>
-            <div className="dash-donut-wrap">
-              <ResponsiveContainer width={150} height={150}>
-                <PieChart>
-                  <Pie
-                    data={statusData}
-                    dataKey="value"
-                    innerRadius={48}
-                    outerRadius={68}
-                    startAngle={90}
-                    endAngle={-270}
-                    stroke="none"
-                  >
-                    {statusData.map((entry) => (
-                      <Cell key={entry.name} fill={entry.color} />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="dash-donut-center">
-                <span className="dash-donut-total">24</span>
-                <span className="dash-donut-total-label">Total</span>
-              </div>
-
-              <ul className="dash-status-list">
-                {statusData.map((s) => (
-                  <li key={s.name}>
-                    <span className="legend-dot" style={{ background: s.color }} />
-                    <span className="dash-status-name">{s.name}</span>
-                    <span className="dash-status-count">
-                      {s.value} ({Math.round((s.value / 24) * 100)}%)
-                    </span>
-                  </li>
-                ))}
-              </ul>
+            <div className="home-metric">
+              <span className="home-metric-value">
+                {resumo.data.cpuMedia}
+                <small>%</small>
+              </span>
+              <span className="home-metric-label">cpu média da frota</span>
             </div>
-          </div>
-        </div>
+            <div className="home-metric">
+              <span className="home-metric-value">
+                {resumo.data.ramMedia}
+                <small>%</small>
+              </span>
+              <span className="home-metric-label">ram média da frota</span>
+            </div>
+            <div className="home-metric">
+              <span className="home-metric-value home-metric-money">
+                R$ {resumo.data.custoMensal}
+              </span>
+              <span className="home-metric-label">custo do mês corrente</span>
+            </div>
+            <div className="home-live">
+              <span className="home-live-dot" />
+              atualizado agora
+            </div>
+          </section>
+        )}
 
-        {/* Alertas / Economia potencial / Previsões */}
-        <div className="row-3col">
-          <div className="card">
-            <h2 className="card-title">Alertas recentes</h2>
-            <ul className="dash-alert-list">
-              {alertas.map((a) => (
-                <li key={a.servidor + a.descricao}>
-                  <AlertTriangle
-                    size={14}
-                    className={a.nivel === 'critico' ? 'icon-critico' : 'icon-atencao'}
+        {/* Gráfico de utilização + saúde da frota */}
+        <section className="home-main-grid">
+          <div className="home-panel home-panel-chart">
+            <div className="home-panel-head">
+              <h2>Utilização nas últimas 24 horas</h2>
+
+              {utilizacao.data && (
+                <div className="home-readout">
+                  <span className="home-readout-item home-readout-cpu">
+                    cpu <strong>{utilizacao.data[utilizacao.data.length - 1]?.cpu}%</strong>
+                  </span>
+                  <span className="home-readout-item home-readout-ram">
+                    ram <strong>{utilizacao.data[utilizacao.data.length - 1]?.ram}%</strong>
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {utilizacao.loading && <LoadingState />}
+            {utilizacao.error && <ErrorState error={utilizacao.error} onRetry={utilizacao.refetch} />}
+            {utilizacao.data && (
+              <ResponsiveContainer width="100%" height={200}>
+                <AreaChart data={utilizacao.data} margin={{ top: 8, right: 4, left: -24, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="preenchimentoCpu" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--chart-cpu)" stopOpacity={0.28} />
+                      <stop offset="100%" stopColor="var(--chart-cpu)" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="preenchimentoRam" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--chart-ram)" stopOpacity={0.22} />
+                      <stop offset="100%" stopColor="var(--chart-ram)" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid stroke="var(--border-color-soft)" vertical={false} strokeDasharray="2 4" />
+                  <XAxis
+                    dataKey="hora"
+                    stroke="var(--text-muted)"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
                   />
-                  <div className="dash-alert-text">
-                    <span className="dash-alert-title">
-                      {a.servidor} · {a.descricao}
-                    </span>
-                    <span className="dash-alert-date">{a.data}</span>
+                  <YAxis
+                    stroke="var(--text-muted)"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                    unit="%"
+                    width={34}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      background: 'var(--bg-card)',
+                      border: '1px solid var(--border-color)',
+                      borderRadius: 6,
+                      fontSize: 12,
+                    }}
+                    labelStyle={{ color: 'var(--text-secondary)' }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="cpu"
+                    stroke="var(--chart-cpu)"
+                    strokeWidth={1.75}
+                    fill="url(#preenchimentoCpu)"
+                    dot={false}
+                    activeDot={{ r: 3.5 }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="ram"
+                    stroke="var(--chart-ram)"
+                    strokeWidth={1.75}
+                    fill="url(#preenchimentoRam)"
+                    dot={false}
+                    activeDot={{ r: 3.5 }}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+
+          <div className="home-panel home-panel-health">
+            <div className="home-panel-head">
+              <h2>Saúde da frota</h2>
+            </div>
+
+            {statusServidores.loading && <LoadingState />}
+            {statusServidores.error && (
+              <ErrorState error={statusServidores.error} onRetry={statusServidores.refetch} />
+            )}
+            {statusServidores.data && (
+              <>
+                <div className="home-health-total">
+                  <span>{statusTotal}</span>
+                  <p>servidores no total</p>
+                </div>
+
+                <div className="home-health-bar" role="img" aria-label="Distribuição de status da frota">
+                  {segmentos.map((s) => (
+                    <span
+                      key={s.chave}
+                      className={`home-health-segmento home-health-${s.chave}`}
+                      style={{ flexGrow: s.valor || 0.0001 }}
+                    />
+                  ))}
+                </div>
+
+                <ul className="home-health-legend">
+                  {segmentos.map((s) => (
+                    <li key={s.chave}>
+                      <span className={`home-health-dot home-health-${s.chave}`} />
+                      {s.valor} {s.rotulo}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
+        </section>
+
+        {/* Alertas em formato de log + economia + previsão */}
+        <section className="home-lower-grid">
+          <div className="home-panel home-panel-log">
+            <div className="home-panel-head">
+              <h2>Alertas recentes</h2>
+            </div>
+
+            {alertas.loading && <LoadingState />}
+            {alertas.error && <ErrorState error={alertas.error} onRetry={alertas.refetch} />}
+            {alertas.data && (
+              <>
+                <ul className="home-log">
+                  {alertas.data.map((a) => (
+                    <li key={a.servidor + a.descricao}>
+                      <span className="home-log-time">{a.data}</span>
+                      <span className={`home-log-dot home-log-dot-${a.nivel}`} />
+                      <span className="home-log-text">
+                        <strong>{a.servidor}</strong> {a.descricao}
+                      </span>
+                    </li>
+                  ))}
+                  {alertas.data.length === 0 && (
+                    <li className="home-log-vazio">Nenhum alerta nas últimas 24 horas.</li>
+                  )}
+                </ul>
+                {alertas.data.length > 0 && (
+                  <a className="home-panel-link" href="#/servidores">
+                    Ver todos os servidores
+                  </a>
+                )}
+              </>
+            )}
+          </div>
+
+          <div className="home-side-col">
+            <div className="home-panel home-panel-economia">
+              {economia.loading && <LoadingState />}
+              {economia.error && <ErrorState error={economia.error} onRetry={economia.refetch} />}
+              {economia.data && (
+                <>
+                  <p className="home-economia-label">Economia possível este mês</p>
+                  <p className="home-economia-valor">R$ {economia.data.valor}</p>
+                  <p className="home-economia-nota">
+                    Aplicando as otimizações recomendadas para os servidores acima da capacidade ideal.
+                  </p>
+                </>
+              )}
+            </div>
+
+            <div className="home-panel home-panel-previsao">
+              {previsao.loading && <LoadingState />}
+              {previsao.error && <ErrorState error={previsao.error} onRetry={previsao.refetch} />}
+              {previsao.data && (
+                <>
+                  <div className="home-previsao-head">
+                    <ArrowUpRight size={14} className="icon-critico" />
+                    <span>previsão de saturação</span>
                   </div>
-                </li>
-              ))}
-            </ul>
-            <a className="card-link" href="#/servidores">
-              Ver todos →
-            </a>
-          </div>
-
-          <div className="card">
-            <h2 className="card-title">Economia potencial</h2>
-            <p className="dash-economia-value">
-              R$ 1.280 <span>/mês</span>
-            </p>
-            <p className="dash-economia-sub">Com as otimizações recomendadas</p>
-            <ResponsiveContainer width="100%" height={60}>
-              <LineChart data={economiaData.map((v, i) => ({ i, v }))}>
-                <Line type="monotone" dataKey="v" stroke="var(--status-normal)" strokeWidth={2} dot={false} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div className="card">
-            <h2 className="card-title">Previsões importantes</h2>
-            <div className="dash-prev-item">
-              <TrendingUp size={16} className="icon-critico" />
-              <div>
-                <p className="dash-prev-server">SRV-02</p>
-                <p className="dash-prev-desc">Risco de saturação de disco</p>
-                <p className="dash-prev-meta">3 horas · Probabilidade: 87%</p>
-              </div>
+                  <p className="home-previsao-texto">
+                    <strong>{previsao.data.servidor}</strong> deve atingir o limite de disco em{' '}
+                    <strong>{previsao.data.tempoEstimado}</strong>.
+                  </p>
+                  <p className="home-previsao-prob">{previsao.data.probabilidade}% de probabilidade</p>
+                </>
+              )}
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </>
   );

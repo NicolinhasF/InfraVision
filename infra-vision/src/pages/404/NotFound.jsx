@@ -9,7 +9,7 @@ export default function NotFound() {
       <h2>Página não encontrada</h2>
       <p>O endereço acessado não existe ou foi removido.</p>
 
-      <Link to="/home" className="home-link">
+      <Link to="/login" className="home-link">
         Voltar para o início
       </Link>
     </main>
