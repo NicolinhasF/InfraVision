@@ -22,4 +22,4 @@ conexao.query("select 1") //selecione uma conexão
     });
 })
 
-.catch(erro => console.log("Falha na conexão")); //se der erro
+.catch(erro => console.error("Falha na conexão com o banco:", erro.message)); //se der erro

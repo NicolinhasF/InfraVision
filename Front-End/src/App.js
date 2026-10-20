@@ -1,6 +1,7 @@
 
 import Login from "./components/paginas/Login/Login";
 import Dashboard from "./components/paginas/Dashboard/Dashboard";
+import Perfil from "./components/paginas/Perfil/Perfil";
 import Servidores from "./components/paginas/Servidores/Servidores";
 import DetalhesServidor from "./components/paginas/DetalhesServidor/DetalhesServidor";
 
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<Login />} />
       
           <Route path="/home" element={<Dashboard />} />
+          <Route path="/perfil" element={<Perfil />} />
 
           <Route path="/servidores" element={<Servidores />} />
 
@@ -31,4 +33,3 @@ function App() {
 }
 
 export default App;
-

@@ -28,6 +28,7 @@ function MainLogin() {
             );
 
             if (response.status === 200) {
+                sessionStorage.setItem("usuarioId", response.data.id);
                 navigate("/home");
             }
 
