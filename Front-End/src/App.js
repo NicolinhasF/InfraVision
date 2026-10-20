@@ -1,6 +1,8 @@
 
 import Login from "./components/paginas/Login/Login";
 import Dashboard from "./components/paginas/Dashboard/Dashboard";
+import Servidores from "./components/paginas/Servidores/Servidores";
+import DetalhesServidor from "./components/paginas/DetalhesServidor/DetalhesServidor";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -15,6 +17,10 @@ function App() {
           <Route path="/" element={<Login />} />
       
           <Route path="/home" element={<Dashboard />} />
+
+          <Route path="/servidores" element={<Servidores />} />
+
+          <Route path="/servidores/:id" element={<DetalhesServidor />} />
 
 
         </Routes>
