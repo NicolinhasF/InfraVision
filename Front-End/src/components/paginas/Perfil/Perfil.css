@@ -1,0 +1,350 @@
+.perfil-header h1 {
+    font-size: 28px;
+}
+
+.perfil-header p {
+    font-size: 13px;
+}
+
+.perfil-card {
+    position: relative;
+    width: 100%;
+    max-width: 940px;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 36px 40px 38px;
+    border: 1px solid #efedf5;
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 12px 36px rgba(39, 20, 75, 0.07);
+}
+
+.perfil-card::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #6c2de8, #a77aff);
+    content: "";
+}
+
+.perfil-identidade {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding-bottom: 28px;
+}
+
+.perfil-avatar {
+    width: 84px;
+    height: 84px;
+    flex: 0 0 84px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #f1ebff, #e4d8ff);
+    color: #6e35e8;
+    font-size: 25px;
+    font-weight: 700;
+    box-shadow: inset 0 0 0 1px rgba(108, 45, 232, 0.08);
+}
+
+.perfil-avatar-mini {
+    overflow: hidden;
+}
+
+.perfil-foto {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.perfil-identidade-texto h2 {
+    margin: 0;
+    color: #161520;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.perfil-identidade-texto p {
+    margin: 7px 0 0;
+    color: #85818e;
+    font-size: 14px;
+}
+
+.perfil-input-foto {
+    display: none;
+}
+
+.perfil-foto-botao {
+    margin-top: 12px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #6c2de8;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.perfil-foto-botao:hover {
+    color: #4f1db9;
+    text-decoration: underline;
+}
+
+.perfil-foto-botao:focus-visible {
+    outline: 3px solid rgba(108, 45, 232, 0.28);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+.perfil-mensagem {
+    width: 100%;
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 20px 24px;
+    border-radius: 14px;
+    background: #ffffff;
+    color: #5d586b;
+    font-size: 14px;
+}
+
+.perfil-mensagem-erro {
+    border: 1px solid #f2d9df;
+    background: #fff8f9;
+    color: #a82f48;
+}
+
+.perfil-mensagem-sucesso {
+    border: 1px solid #cfe9da;
+    background: #f5fcf7;
+    color: #247145;
+}
+
+.perfil-formulario {
+    display: grid;
+    gap: 16px;
+    margin-top: 28px;
+    padding: 24px;
+    border: 1px solid #efedf5;
+    border-radius: 14px;
+    background: #fcfbff;
+}
+
+.perfil-formulario h3 {
+    margin: 0;
+    color: #161520;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.perfil-formulario label {
+    display: grid;
+    gap: 7px;
+    color: #6b6880;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.perfil-formulario input {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid #e5e0ee;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #161520;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.perfil-campo-senha {
+    position: relative;
+    display: block;
+}
+
+.perfil-formulario .perfil-campo-senha input {
+    padding-right: 82px;
+}
+
+.perfil-senha-visualizar {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    padding: 4px;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+    color: #6c2de8;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.perfil-senha-visualizar:hover {
+    color: #4f1db9;
+}
+
+.perfil-senha-visualizar:focus-visible {
+    outline: 3px solid rgba(108, 45, 232, 0.2);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.perfil-formulario input:focus {
+    border-color: #8c60e8;
+    outline: 3px solid rgba(108, 45, 232, 0.12);
+}
+
+.perfil-formulario-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.perfil-botao:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
+.perfil-divisor {
+    height: 1px;
+    background: #ebe8f5;
+}
+
+.perfil-campos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin: 30px 0 0;
+}
+
+.perfil-campo {
+    min-width: 0;
+    padding: 18px 20px;
+    border: 1px solid #f0edf7;
+    border-radius: 13px;
+    background: #fbfaff;
+}
+
+.perfil-campo dt {
+    color: #6b6880;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.perfil-campo dd {
+    margin: 9px 0 0;
+    overflow-wrap: anywhere;
+    color: #161520;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.perfil-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.perfil-botao {
+    min-width: 158px;
+    min-height: 46px;
+    padding: 11px 20px;
+    border: 0;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.perfil-botao:focus-visible {
+    outline: 3px solid rgba(108, 45, 232, 0.28);
+    outline-offset: 3px;
+}
+
+.perfil-botao-primario {
+    background: #6c2de8;
+    color: #ffffff;
+    box-shadow: 0 5px 12px rgba(108, 45, 232, 0.18);
+}
+
+.perfil-botao-primario:hover {
+    background: #5b23c8;
+    box-shadow: 0 7px 16px rgba(108, 45, 232, 0.23);
+    transform: translateY(-1px);
+}
+
+.perfil-botao-secundario {
+    background: #f0eaff;
+    color: #6c2de8;
+}
+
+.perfil-botao-secundario:hover {
+    background: #e6dcff;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 767px) {
+    .perfil-header h1 {
+        font-size: 25px;
+    }
+
+    .perfil-card {
+        max-width: none;
+        padding: 26px 20px;
+    }
+
+    .perfil-avatar {
+        width: 68px;
+        height: 68px;
+        flex-basis: 68px;
+        font-size: 21px;
+    }
+
+    .perfil-identidade-texto h2 {
+        font-size: 20px;
+    }
+
+    .perfil-mensagem {
+        padding: 16px 18px;
+    }
+
+    .perfil-campos {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-top: 22px;
+    }
+
+    .perfil-campo {
+        padding: 15px 16px;
+    }
+
+    .perfil-acoes {
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .perfil-formulario {
+        padding: 18px;
+    }
+
+    .perfil-formulario-acoes {
+        flex-direction: column;
+    }
+
+    .perfil-botao {
+        width: 100%;
+    }
+}
