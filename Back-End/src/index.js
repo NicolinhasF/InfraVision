@@ -5,21 +5,21 @@ const routers = require('../src/routers');
 
 require('dotenv').config();
 
-const app = express(); // api utilize o express
+const app = express();
 
-app.use(express.json()); // use o modo json
-app.use(cors());// necessario para habilitar comunicação com servidor 
+app.use(express.json());
+app.use(cors());
 app.use('/api', routers);
-app.use(routers); //utilize as totas
+app.use(routers);
 
 const PORT = process.env.PORT || 3001
 
-conexao.query("select 1") //selecione uma conexão
+conexao.query("select 1")
 .then(() =>{
-    console.log("conectado com sucesso") //se foi sucesso imprima:
-    app.listen(PORT, function(){ //conexão na porta, fique online na porta
+    console.log("conectado com sucesso")
+    app.listen(PORT, function(){
         console.log("Servidor executando na url:http://localhost:3001")
     });
 })
 
-.catch(erro => console.error("Falha na conexão com o banco:", erro.message)); //se der erro
+.catch(erro => console.error("Falha na conexão com o banco:", erro.message));
