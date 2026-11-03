@@ -5,18 +5,6 @@ import "./paginas/Dashboard/Dashboard.css";
 import "./paginas/Infraestrutura/Infraestrutura.css";
 
 
-// =====================================================================
-// COMUNICAÇÃO COM O BACK-END
-//
-// Rotas usadas (Back-End/src/routers.js), todas respondem { total, dados: [...] }:
-//   GET /componentes      -> [{ id, nome, tipo, descricao, status }]
-//   GET /relacionamentos  -> [{ id, origem: {id, nome}, destino: {id, nome}, tipo, descricao }]
-//   GET /analises         -> [{ id, componente: {id, nome} | null, severidade, criado_em, ... }]
-//
-// Se o back-end mudar de endereço, crie o arquivo Front-End/.env com:
-//   REACT_APP_API_URL=http://localhost:3001
-// =====================================================================
-
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
 
 
@@ -28,8 +16,6 @@ async function buscarLista(rota) {
 }
 
 
-// Traduz o erro do axios em uma mensagem para mostrar na tela.
-// O back-end responde { erro: "..." } (infraestrutura) ou { msg: "..." } (login/perfil).
 function mensagemDeErro(error, padrao) {
 
     if (error.response) {
@@ -38,22 +24,6 @@ function mensagemDeErro(error, padrao) {
 
     return "Não foi possível conectar ao servidor. Verifique se o back-end está em execução.";
 }
-
-
-// =====================================================================
-// FUNÇÕES DO GRAFO
-//
-// São "puras": recebem os dados que vieram do back-end e devolvem o que
-// a tela precisa desenhar (status, dependentes e posição dos nós).
-// =====================================================================
-
-// -------------------------
-// STATUS DO COMPONENTE
-// -------------------------
-
-// O banco guarda a severidade da análise (baixa / media / alta / critica),
-// e a tela usa três selos (Normal / Atenção / Crítico).
-// Se quiser que "alta" também apareça como Crítico, é só mudar aqui.
 const SEVERIDADE_PARA_STATUS = {
     critica: { rotulo: "Crítico", classe: "critico", nivel: 3 },
     alta: { rotulo: "Atenção", classe: "atencao", nivel: 2 },
@@ -113,11 +83,6 @@ function obterStatus(componente, analise) {
     return { rotulo: capitalizar(componente.status), classe: "neutro", nivel: 0 };
 }
 
-
-// -------------------------
-// COR DO NÓ CONFORME O TIPO
-// -------------------------
-
 function classeDoTipo(tipo) {
 
     const texto = (tipo || "")
@@ -134,14 +99,6 @@ function classeDoTipo(tipo) {
     return "tipo-outro";
 }
 
-
-// -------------------------
-// DEPENDENTES E IMPACTOS
-// -------------------------
-
-// Dependentes diretos: quem tem um relacionamento APONTANDO para o
-// componente (origem -> destino). Ex: "Servidor Web depende_de Banco"
-// => o Servidor Web é dependente do Banco.
 function dependentesDe(idComponente, relacionamentos) {
 
     const porOrigem = new Map();
@@ -160,8 +117,6 @@ function dependentesDe(idComponente, relacionamentos) {
     return Array.from(porOrigem.values());
 }
 
-
-// Texto de impacto de um dependente (usa a descrição que veio do banco).
 function textoDeImpacto(relacionamento) {
 
     if (relacionamento.descricao) {
@@ -173,27 +128,18 @@ function textoDeImpacto(relacionamento) {
     return `${relacionamento.origem.nome} pode ser afetado (${tipo}).`;
 }
 
-
-// -------------------------
-// LAYOUT (POSIÇÃO DOS NÓS)
-// -------------------------
-
 const NO_ALTURA = 48;
 
-// Cada nó tem 140px de largura (veja .grafo-no no CSS) + 16px de folga.
+
 const ESPACO_POR_NO = 156;
 const ESPACO_ENTRE_CAMADAS = 130;
 const MARGEM_VERTICAL = 44;
 
 
-// Tipos de relacionamento em que a ORIGEM fica ABAIXO do destino.
-// Ex: "Servidor de Backup  backup_de  Banco" => o backup fica abaixo do banco.
-// Todos os outros tipos (depende_de, conectado_a...) deixam a origem em cima.
+
 const TIPOS_COM_ORIGEM_ABAIXO = ["backup_de"];
 
 
-// Organiza os componentes em "camadas" (linhas), de cima para baixo.
-// x é em porcentagem da largura (a tela se ajusta sozinha) e y em pixels.
 function calcularLayout(componentes, relacionamentos) {
 
     const ids = componentes.map((componente) => componente.id);
@@ -227,8 +173,7 @@ function calcularLayout(componentes, relacionamentos) {
     });
 
 
-    // Empurra quem fica abaixo para baixo de quem fica acima. O limite (ids.length - 1)
-    // evita loop infinito se existir relacionamento circular.
+
     const limite = Math.max(ids.length - 1, 0);
 
     for (let rodada = 0; rodada < ids.length; rodada++) {
@@ -253,7 +198,7 @@ function calcularLayout(componentes, relacionamentos) {
     }
 
 
-    // Renumera as camadas para ficarem 0, 1, 2... sem "buracos"
+
     const camadasUsadas = Array.from(new Set(ids.map((id) => camadaPorId[id]))).sort((a, b) => a - b);
     const camadas = camadasUsadas.map(() => []);
 
@@ -311,17 +256,11 @@ function calcularLayout(componentes, relacionamentos) {
         nos: componentes.map((componente) => posicoes[componente.id]),
         linhas,
         altura: MARGEM_VERTICAL * 2 + Math.max(camadas.length - 1, 0) * ESPACO_ENTRE_CAMADAS,
-        // Com n nós na mesma linha, a distância entre os centros é
-        // largura / (n + 1). Por isso a largura mínima é (n + 1) * espaço.
-        // Se a tela for menor que isso, o grafo rola na horizontal.
+
         larguraMinima: maiorCamada <= 1 ? ESPACO_POR_NO : (maiorCamada + 1) * ESPACO_POR_NO
     };
 }
 
-
-// =====================================================================
-// PÁGINA
-// =====================================================================
 
 function MainInfraestrutura() {
 
@@ -336,7 +275,6 @@ function MainInfraestrutura() {
     const [selecionadoId, setSelecionadoId] = useState(null);
 
 
-    // BUSCA OS DADOS NO BACK-END
 
     useEffect(() => {
 
@@ -349,7 +287,6 @@ function MainInfraestrutura() {
 
             try {
 
-                // As três rotas são chamadas ao mesmo tempo
                 const [respComponentes, respRelacionamentos, respAnalises] =
                     await Promise.allSettled([
                         buscarLista("/componentes"),
@@ -359,7 +296,6 @@ function MainInfraestrutura() {
 
                 if (!ativo) return;
 
-                // Componentes e relacionamentos são obrigatórios para desenhar o grafo
                 if (respComponentes.status === "rejected") {
                     throw respComponentes.reason;
                 }
@@ -371,8 +307,6 @@ function MainInfraestrutura() {
                 setComponentes(respComponentes.value);
                 setRelacionamentos(respRelacionamentos.value);
 
-                // Análises só definem a cor do status. Se falharem, o grafo continua
-                // aparecendo usando o status cadastrado no próprio componente.
                 setAnalises(
                     respAnalises.status === "fulfilled" ? respAnalises.value : []
                 );
@@ -405,7 +339,6 @@ function MainInfraestrutura() {
     }, [tentativa]);
 
 
-    // DADOS CALCULADOS A PARTIR DO QUE VEIO DO BACK-END
 
     const layout = useMemo(
         () => calcularLayout(componentes, relacionamentos),
@@ -426,7 +359,6 @@ function MainInfraestrutura() {
     }, [componentes, analises]);
 
 
-    // Se ninguém foi clicado ainda, começa pelo componente em pior estado
     const selecionado = useMemo(() => {
 
         const escolhido = componentes.find((componente) => componente.id === selecionadoId);
@@ -462,8 +394,6 @@ function MainInfraestrutura() {
         <div className="main-dashboard">
 
 
-            {/* TOPO */}
-
             <div className="dashboard-header">
 
                 <div>
@@ -492,7 +422,6 @@ function MainInfraestrutura() {
             </div>
 
 
-            {/* CARREGANDO / ERRO / VAZIO */}
 
             {carregando && (
 
@@ -529,9 +458,6 @@ function MainInfraestrutura() {
                 </div>
 
             )}
-
-
-            {/* GRAFO + COMPONENTE SELECIONADO */}
 
             {!carregando && !erro && selecionado && (
 

@@ -186,11 +186,15 @@ function MainAnalises() {
         try {
             const resposta = await api.post("/chat", {
                 mensagem: `Analise os dados atuais de infraestrutura abaixo. Identifique padrões e riscos, explique as limitações e apresente recomendações sem inventar informações. Métricas: ${JSON.stringify(contextoMetricas)}. Análises registradas: ${JSON.stringify(contextoAnalises)}.`,
-            });
+            }, { timeout: 60000 });
 
             setRespostaIa(resposta.data?.resposta || "A IA não retornou uma resposta.");
         } catch (error) {
-            setErroIa(error.response?.data?.erro || "Não foi possível consultar a inteligência artificial.");
+            setErroIa(
+                error.code === "ECONNABORTED"
+                    ? "A consulta à inteligência artificial excedeu o tempo limite. Tente novamente."
+                    : error.response?.data?.erro || "Não foi possível consultar a inteligência artificial."
+            );
         } finally {
             setConsultandoIa(false);
         }
@@ -272,10 +276,6 @@ function MainAnalises() {
                 <p className="analises-state">Não há métricas disponíveis para montar o gráfico.</p>
             )}
         </section>
-    );
-
-    const renderAgrupamentos = () => (
-        <GroupsPanel grupos={agrupamentos} />
     );
 
     const tabs = [
