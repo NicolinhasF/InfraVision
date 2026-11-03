@@ -4,6 +4,7 @@ import Dashboard from "./components/paginas/Dashboard/Dashboard";
 import Perfil from "./components/paginas/Perfil/Perfil";
 import Servidores from "./components/paginas/Servidores/Servidores";
 import DetalhesServidor from "./components/paginas/DetalhesServidor/DetalhesServidor";
+import Infraestrutura from "./components/paginas/Infraestrutura/Infraestrutura";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -23,6 +24,8 @@ function App() {
           <Route path="/servidores" element={<Servidores />} />
 
           <Route path="/servidores/:id" element={<DetalhesServidor />} />
+
+          <Route path="/infraestrutura" element={<Infraestrutura />} />
 
 
         </Routes>
