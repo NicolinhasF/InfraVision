@@ -4,6 +4,8 @@ import Dashboard from "./components/paginas/Dashboard/Dashboard";
 import Perfil from "./components/paginas/Perfil/Perfil";
 import Servidores from "./components/paginas/Servidores/Servidores";
 import DetalhesServidor from "./components/paginas/DetalhesServidor/DetalhesServidor";
+import Analises from "./components/paginas/Analises/Analises";
+import Previsoes from "./components/paginas/Previsoes/Previsoes";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -23,6 +25,8 @@ function App() {
           <Route path="/servidores" element={<Servidores />} />
 
           <Route path="/servidores/:id" element={<DetalhesServidor />} />
+          <Route path="/analises" element={<Analises />} />
+          <Route path="/previsoes" element={<Previsoes />} />
 
 
         </Routes>
