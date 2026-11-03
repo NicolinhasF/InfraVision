@@ -1,0 +1,387 @@
+/* =========================
+   AVISOS (carregando / erro)
+========================= */
+
+.infra-mensagem {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 16px;
+
+    padding: 20px 24px;
+
+    border-radius: 13px;
+
+    background: #ffffff;
+
+    color: #5d586b;
+
+    font-size: 14px;
+}
+
+
+.infra-mensagem-erro {
+    border: 1px solid #f2d9df;
+
+    background: #fff8f9;
+
+    color: #a82f48;
+}
+
+
+.infra-botao-recarregar {
+    flex-shrink: 0;
+
+    padding: 9px 18px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #efe8ff;
+
+    color: #6c32ff;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.infra-botao-recarregar:hover {
+    background: #e2d6ff;
+}
+
+
+.infra-botao-recarregar:focus-visible {
+    outline: 2px solid #6c32ff;
+
+    outline-offset: 2px;
+}
+
+
+/* =========================
+   GRAFO
+========================= */
+
+/* deixa os painéis encolherem; o grafo rola na horizontal dentro do painel */
+.infra-grid > .dashboard-panel {
+    min-width: 0;
+}
+
+
+.grafo-rolagem {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+.grafo {
+    position: relative;
+
+    width: 100%;
+}
+
+
+.grafo-linhas {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    overflow: visible;
+
+    pointer-events: none;
+}
+
+
+.grafo-linha {
+    stroke: #d9cff7;
+
+    stroke-width: 2;
+
+    pointer-events: stroke;
+
+    transition: 0.2s;
+}
+
+
+.grafo-linha-destaque {
+    stroke: #6c32ff;
+
+    stroke-width: 2.5;
+}
+
+
+/* =========================
+   NÓS DO GRAFO
+========================= */
+
+.grafo-no {
+    position: absolute;
+
+    width: 140px;
+
+    height: 48px;
+
+    transform: translate(-50%, -50%);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 0 14px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #f1f0f6;
+
+    color: #5d586b;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.03em;
+
+    text-transform: uppercase;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.grafo-no:hover {
+    transform: translate(-50%, -50%) scale(1.04);
+}
+
+
+.grafo-no:focus-visible {
+    outline: 2px solid #6c32ff;
+
+    outline-offset: 3px;
+}
+
+
+.grafo-no-selecionado {
+    box-shadow: 0 0 0 3px #6c32ff;
+}
+
+
+.grafo-no-nome {
+    display: -webkit-box;
+
+    overflow: hidden;
+
+    -webkit-line-clamp: 2;
+
+    -webkit-box-orient: vertical;
+
+    line-height: 1.35;
+}
+
+
+.grafo-no-ponto {
+    position: absolute;
+
+    top: 7px;
+
+    right: 7px;
+
+    width: 8px;
+
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #b9b5c4;
+}
+
+
+.grafo-no-ponto.normal {
+    background: #0da653;
+}
+
+
+.grafo-no-ponto.atencao {
+    background: #f0a000;
+}
+
+
+.grafo-no-ponto.critico {
+    background: #ef3b45;
+}
+
+
+/* cor do nó conforme o tipo do componente */
+
+.tipo-servidor {
+    background: #e6edff;
+
+    color: #3c72ff;
+}
+
+
+.tipo-banco {
+    background: #f1e9ff;
+
+    color: #5a22e6;
+}
+
+
+.tipo-nuvem {
+    background: #e9e8ff;
+
+    color: #5b57d6;
+}
+
+
+.tipo-rede {
+    background: #e2f4f7;
+
+    color: #0e7490;
+}
+
+
+.tipo-backup {
+    background: #e3f6ec;
+
+    color: #139c52;
+}
+
+
+.grafo-legenda {
+    margin: 18px 0 0;
+
+    color: #8b8798;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   COMPONENTE SELECIONADO
+========================= */
+
+.infra-detalhe {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+}
+
+
+.infra-detalhe-rotulo {
+    color: #8b8798;
+
+    font-size: 12px;
+
+    font-weight: 500;
+}
+
+
+.infra-detalhe-nome {
+    margin: 8px 0 12px;
+
+    color: #1a1921;
+
+    font-size: 26px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    overflow-wrap: anywhere;
+}
+
+
+.status-badge.neutro {
+    color: #6d6a78;
+
+    background: #efeef4;
+}
+
+
+.infra-detalhe-dependentes {
+    margin: 24px 0;
+
+    color: #272530;
+
+    font-size: 14px;
+}
+
+
+.infra-detalhe-dependentes strong {
+    font-weight: 700;
+}
+
+
+.infra-impactos {
+    margin: 10px 0 0;
+
+    padding-left: 18px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    color: #272530;
+
+    font-size: 13px;
+
+    line-height: 1.55;
+}
+
+
+.infra-detalhe-vazio {
+    margin: 10px 0 0;
+
+    color: #8b8798;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 500px) {
+
+    .infra-mensagem {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    .infra-detalhe-nome {
+        font-size: 22px;
+    }
+
+}
