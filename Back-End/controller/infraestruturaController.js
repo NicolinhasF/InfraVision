@@ -158,9 +158,44 @@ const infraestruturaController = {
     listarComponentes: (req, res) => responderConsulta(
         res,
         () => ({
-            sql: `SELECT id, nome, tipo, descricao, status
+            sql: `SELECT id, nome, ip, tipo, descricao, status
                   FROM componente_infraestrutura
                   ORDER BY nome`,
+        })
+    ),
+
+    // Lista somente os componentes do tipo servidor e associa a medição mais recente.
+    listarServidores: (req, res) => responderConsulta(
+        res,
+        () => ({
+            sql: `SELECT c.id, c.nome, c.ip, c.tipo, c.descricao, c.status,
+                         m.cpu_percent, m.memoria_percent, m.disco_percent,
+                         m.rede_mbps, m.latencia_ms, m.registrado_em
+                  FROM componente_infraestrutura AS c
+                  LEFT JOIN metricas_infraestrutura AS m
+                    ON m.id = (
+                        SELECT m2.id
+                        FROM metricas_infraestrutura AS m2
+                        WHERE m2.componente_id = c.id
+                        ORDER BY m2.registrado_em DESC, m2.id DESC
+                        LIMIT 1
+                    )
+                  WHERE LOWER(c.tipo) = 'servidor'
+                  ORDER BY c.nome`,
+        }),
+        (linha) => ({
+            id: linha.id,
+            nome: linha.nome,
+            ip: linha.ip,
+            tipo: linha.tipo,
+            descricao: linha.descricao,
+            status: linha.status,
+            cpu_percent: linha.cpu_percent === null ? null : Number(linha.cpu_percent),
+            memoria_percent: linha.memoria_percent === null ? null : Number(linha.memoria_percent),
+            disco_percent: linha.disco_percent === null ? null : Number(linha.disco_percent),
+            rede_mbps: linha.rede_mbps === null ? null : Number(linha.rede_mbps),
+            latencia_ms: linha.latencia_ms === null ? null : Number(linha.latencia_ms),
+            registrado_em: linha.registrado_em,
         })
     ),
 
