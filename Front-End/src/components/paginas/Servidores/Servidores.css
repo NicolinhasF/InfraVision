@@ -231,3 +231,28 @@
     }
 
 }
+
+/* Estados da consulta ao backend */
+.tabela-feedback {
+    margin: 18px 0 4px;
+    color: #777286;
+    font-size: 13px;
+    text-align: center;
+}
+
+.tabela-erro {
+    color: #c62828;
+}
+
+.uso-sem-dado {
+    color: #8b8798;
+}
+
+.status-badge.desconhecido {
+    color: #777286;
+    background: #efeff3;
+}
+
+.coluna-nome {
+    min-width: 190px;
+}

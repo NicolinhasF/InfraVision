@@ -1,22 +1,3 @@
-.previsoes-layout .sidebar {
-    width: 184px;
-    padding: 22px 12px;
-}
-
-.previsoes-layout .sidebar-logo {
-    margin-bottom: 42px;
-    font-size: 20px;
-}
-
-.previsoes-layout .sidebar-link {
-    padding: 10px 14px;
-    font-size: 11px;
-}
-
-.previsoes-layout .dashboard-content {
-    margin-left: 184px;
-}
-
 .previsoes-page {
     min-height: 100vh;
     padding: 26px 32px 42px;
@@ -215,10 +196,6 @@
 }
 
 @media (max-width: 767px) {
-    .previsoes-layout .dashboard-content {
-        margin-left: 0;
-    }
-
     .previsoes-page {
         padding: 22px 18px 32px;
     }

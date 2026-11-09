@@ -13,6 +13,7 @@ routers.put('/perfil/:id', usuarioController.AtualizarPerfilUsuario);
 routers.put('/perfil/:id/senha', usuarioController.AtualizarSenhaUsuario);
 
 routers.get('/componentes', infraestruturaController.listarComponentes);
+routers.get('/servidores', infraestruturaController.listarServidores);
 routers.get('/relacionamentos', infraestruturaController.listarRelacionamentos);
 routers.get('/metricas', infraestruturaController.listarMetricas);
 routers.get('/analises', infraestruturaController.listarAnalises);

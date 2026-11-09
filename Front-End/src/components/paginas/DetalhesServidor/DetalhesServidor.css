@@ -188,3 +188,28 @@
     }
 
 }
+
+.detalhes-identificacao {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin: -12px 0 22px;
+    color: #777286;
+    font-size: 13px;
+}
+
+.detalhes-identificacao strong {
+    color: #272530;
+}
+
+.aviso-historico {
+    margin: 8px 0 0;
+    color: #8b8798;
+    font-size: 11px;
+}
+
+.detalhe-recomendacao {
+    display: block;
+    margin-top: 5px;
+    color: #777286;
+}
