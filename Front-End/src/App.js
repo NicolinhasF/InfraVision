@@ -7,6 +7,7 @@ import DetalhesServidor from "./components/paginas/DetalhesServidor/DetalhesServ
 import Infraestrutura from "./components/paginas/Infraestrutura/Infraestrutura";
 import Analises from "./components/paginas/Analises/Analises";
 import Previsoes from "./components/paginas/Previsoes/Previsoes";
+import Custos from "./components/paginas/Custos/Custos";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -30,6 +31,8 @@ function App() {
           <Route path="/previsoes" element={<Previsoes />} />
 
           <Route path="/infraestrutura" element={<Infraestrutura />} />
+
+          <Route path="/custos" element={<Custos />} />
 
 
         </Routes>
