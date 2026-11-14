@@ -372,9 +372,6 @@ function MainAnalises() {
                         <GroupsPanel grupos={agrupamentos} />
                     )}
 
-                    <p className="analises-note">
-                        Os agrupamentos são calculados pela média das métricas percentuais disponíveis (CPU, RAM e disco). O destaque de anomalia usa um limiar visual de 80%; esses critérios são regras da interface, não percentuais de anomalia fornecidos pelo banco ou pela Groq.
-                    </p>
                 </>
             )}
         </div>
@@ -407,12 +404,6 @@ function PatternPanel({ analise, contagens, onConsultarIa, consultandoIa, respos
                     </React.Fragment>
                 ))}
             </div>
-
-            <button className="analises-ai-button" type="button" onClick={onConsultarIa} disabled={consultandoIa}>
-                {consultandoIa ? "Consultando IA..." : "Interpretar dados com IA"}
-            </button>
-            {erroIa && <div className="analises-ai-result analises-error">{erroIa}</div>}
-            {respostaIa && <div className="analises-ai-result">{respostaIa}</div>}
         </section>
     );
 }

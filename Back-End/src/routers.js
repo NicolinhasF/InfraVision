@@ -2,7 +2,10 @@ const express = require('express');
 const usuarioController = require('../controller/controller');
 const chatController = require('../controller/chatController');
 const infraestruturaController = require('../controller/infraestruturaController');
+const custosController = require('../controller/custosController');
+const previsoesController = require('../controller/previsoesController');
 const routers = express.Router();
+
 
 routers.post('/login', usuarioController.LoginUsuario);
 routers.get('/ListarPerfil/:id', usuarioController.PerfilUsuario);
@@ -18,7 +21,9 @@ routers.get('/relacionamentos', infraestruturaController.listarRelacionamentos);
 routers.get('/metricas', infraestruturaController.listarMetricas);
 routers.get('/analises', infraestruturaController.listarAnalises);
 routers.get('/previsoes', infraestruturaController.listarPrevisoes);
-
+routers.post('/previsoes/gerar', previsoesController.gerarPrevisoes);
+routers.post('/custos/calcular', custosController.calcularCustos);
+routers.get('/custos', custosController.listarCustos);
 routers.post('/chat', chatController.enviarMensagem);
 
 module.exports = routers;

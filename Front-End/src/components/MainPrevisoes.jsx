@@ -66,11 +66,13 @@ function MainPrevisoes() {
         setErro("");
 
         try {
-            const [respostaComponentes, respostaMetricas, respostaPrevisoes] = await Promise.all([
+            const [respostaComponentes, respostaMetricas] = await Promise.all([
                 api.get("/componentes"),
                 api.get("/metricas"),
-                api.get("/previsoes"),
             ]);
+
+            await api.post("/previsoes/gerar");
+            const respostaPrevisoes = await api.get("/previsoes");
 
             const listaComponentes = Array.isArray(respostaComponentes.data?.dados)
                 ? respostaComponentes.data.dados
@@ -299,19 +301,11 @@ function MainPrevisoes() {
                             </div>
                         )}
 
-                        {historico.length < 2 && historico.length > 0 && (
-                            <p className="previsoes-chart-note">
-                                Existe apenas uma medição histórica para esta métrica. É possível mostrar o valor atual, mas ainda não há histórico suficiente para desenhar uma tendência contínua.
-                            </p>
-                        )}
                         {historico.length === 0 && (
                             <p className="previsoes-chart-note">Não há histórico cadastrado para a métrica selecionada.</p>
                         )}
-                        {historico.length > 0 && previsoesFiltradas.length === 0 && (
-                            <p className="previsoes-chart-note">Não há previsão cadastrada para esta combinação de servidor e métrica.</p>
-                        )}
-                    </section>
 
+                    </section>
                     <div className="previsoes-summary-grid">
                         <article className="previsoes-summary-card">
                             <span>Valor previsto</span>
@@ -325,24 +319,6 @@ function MainPrevisoes() {
                         </article>
                     </div>
 
-                    <div className="previsoes-ai-row">
-                        <button
-                            type="button"
-                            className="previsoes-ai-button"
-                            onClick={consultarIa}
-                            disabled={consultandoIa || !componenteSelecionado}
-                        >
-                            {consultandoIa ? "Consultando IA..." : "Interpretar previsão com IA"}
-                        </button>
-                        {erroIa && <div className="previsoes-ai-result previsoes-error">{erroIa}</div>}
-                        {respostaIa && <div className="previsoes-ai-result">{formatarRespostaIa(respostaIa)}</div>}
-                    </div>
-
-                    {previsaoPrincipal && (
-                        <p className="previsoes-chart-note">
-                            Previsão registrada para {formatarData(previsaoPrincipal.periodo_previsto)} pelo método: {previsaoPrincipal.metodo || "não informado"}.
-                        </p>
-                    )}
                 </>
             )}
         </div>
