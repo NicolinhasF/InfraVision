@@ -5,8 +5,11 @@ A listagem consome `GET /api/servidores` usando o Axios configurado em `src/serv
 A URL-base pode ser definida em `.env`:
 
 ```env
-REACT_APP_API_URL=http://localhost:3001/api
+REACT_APP_API_URL=http://localhost:3002/api
 ```
+
+Use a mesma porta configurada em `Back-End/.env` na variável `PORT`. Reinicie o
+servidor do front-end depois de alterar essa URL.
 
 A página de detalhes usa:
 

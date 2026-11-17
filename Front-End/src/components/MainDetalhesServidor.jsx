@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
     LineChart,
@@ -15,6 +15,7 @@ import {
 
 import api from "../services/api";
 import { obterStatusOperacional } from "../utils/servidores";
+import useAtualizacaoAutomatica from "../hooks/useAtualizacaoAutomatica";
 
 import "./paginas/Dashboard/Dashboard.css";
 import "./paginas/DetalhesServidor/DetalhesServidor.css";
@@ -49,48 +50,40 @@ function MainDetalhesServidor() {
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
 
-    useEffect(() => {
-        let ativo = true;
+    const carregarDetalhes = useCallback(async () => {
+        try {
+            setCarregando(true);
+            setErro("");
 
-        async function carregarDetalhes() {
-            try {
-                setCarregando(true);
-                setErro("");
+            const [componentesResposta, metricasResposta, analisesResposta] = await Promise.all([
+                api.get("/componentes"),
+                api.get("/metricas", { params: { componente_id: id } }),
+                api.get("/analises", { params: { componente_id: id } }),
+            ]);
 
-                const [componentesResposta, metricasResposta, analisesResposta] = await Promise.all([
-                    api.get("/componentes"),
-                    api.get("/metricas", { params: { componente_id: id } }),
-                    api.get("/analises", { params: { componente_id: id } }),
-                ]);
+            const componentes = componentesResposta.data?.dados || [];
+            const componenteEncontrado = componentes.find(
+                (item) => Number(item.id) === Number(id) && String(item.tipo).toLowerCase() === "servidor"
+            );
 
-                const componentes = componentesResposta.data?.dados || [];
-                const componenteEncontrado = componentes.find(
-                    (item) => Number(item.id) === Number(id) && String(item.tipo).toLowerCase() === "servidor"
-                );
-
-                if (ativo) {
-                    setServidor(componenteEncontrado || null);
-                    setMetricas(metricasResposta.data?.dados || []);
-                    setAnalises(analisesResposta.data?.dados || []);
-                }
-            } catch (error) {
-                if (ativo) {
-                    setErro(
-                        error.response?.data?.erro ||
-                        "Não foi possível carregar os detalhes. Confira a conexão com o backend."
-                    );
-                }
-            } finally {
-                if (ativo) setCarregando(false);
-            }
+            setServidor(componenteEncontrado || null);
+            setMetricas(metricasResposta.data?.dados || []);
+            setAnalises(analisesResposta.data?.dados || []);
+        } catch (error) {
+            setErro(
+                error.response?.data?.erro ||
+                "Não foi possível carregar os detalhes. Confira a conexão com o backend."
+            );
+        } finally {
+            setCarregando(false);
         }
-
-        carregarDetalhes();
-
-        return () => {
-            ativo = false;
-        };
     }, [id]);
+
+    useEffect(() => {
+        carregarDetalhes();
+    }, [carregarDetalhes]);
+
+    useAtualizacaoAutomatica(carregarDetalhes);
 
     // A API entrega as medições mais recentes primeiro. O gráfico precisa da ordem cronológica.
     const historico = useMemo(() => [...metricas].reverse(), [metricas]);

@@ -8,6 +8,9 @@ import Infraestrutura from "./components/paginas/Infraestrutura/Infraestrutura";
 import Analises from "./components/paginas/Analises/Analises";
 import Previsoes from "./components/paginas/Previsoes/Previsoes";
 import Custos from "./components/paginas/Custos/Custos";
+import Recomendacoes from "./components/paginas/Recomendacoes/Recomendacoes";
+import Configuracoes from "./components/paginas/Configuracoes/Configuracoes";
+import AlertasInfraestrutura from "./components/AlertasInfraestrutura";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -16,7 +19,7 @@ function App() {
   return (
     <>
 
-  
+        <AlertasInfraestrutura />
         <Routes>
          
           <Route path="/" element={<Login />} />
@@ -33,6 +36,8 @@ function App() {
           <Route path="/infraestrutura" element={<Infraestrutura />} />
 
           <Route path="/custos" element={<Custos />} />
+          <Route path="/recomendacoes" element={<Recomendacoes />} />
+          <Route path="/configuracoes" element={<Configuracoes />} />
 
 
         </Routes>

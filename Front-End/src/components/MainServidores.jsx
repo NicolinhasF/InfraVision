@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import api from "../services/api";
 import { obterStatusOperacional } from "../utils/servidores";
+import useAtualizacaoAutomatica from "../hooks/useAtualizacaoAutomatica";
 
 import "./paginas/Dashboard/Dashboard.css";
 import "./paginas/Servidores/Servidores.css";
@@ -34,38 +35,31 @@ function MainServidores() {
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
 
-    useEffect(() => {
-        let ativo = true;
+    const carregarServidores = useCallback(async () => {
+        try {
+            setCarregando(true);
+            setErro("");
 
-        async function carregarServidores() {
-            try {
-                setCarregando(true);
-                setErro("");
-
-                const resposta = await api.get("/servidores");
-                const dados = Array.isArray(resposta.data?.dados)
-                    ? resposta.data.dados
-                    : [];
-
-                if (ativo) setServidores(dados);
-            } catch (error) {
-                if (ativo) {
-                    setErro(
-                        error.response?.data?.erro ||
-                        "Não foi possível carregar os servidores. Confira se o backend está em execução."
-                    );
-                }
-            } finally {
-                if (ativo) setCarregando(false);
-            }
+            const resposta = await api.get("/servidores");
+            const dados = Array.isArray(resposta.data?.dados)
+                ? resposta.data.dados
+                : [];
+            setServidores(dados);
+        } catch (error) {
+            setErro(
+                error.response?.data?.erro ||
+                "Não foi possível carregar os servidores. Confira se o backend está em execução."
+            );
+        } finally {
+            setCarregando(false);
         }
-
-        carregarServidores();
-
-        return () => {
-            ativo = false;
-        };
     }, []);
+
+    useEffect(() => {
+        carregarServidores();
+    }, [carregarServidores]);
+
+    useAtualizacaoAutomatica(carregarServidores);
 
     const servidoresFiltrados = useMemo(() => {
         const termo = busca.trim().toLowerCase();

@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import useAtualizacaoAutomatica from "../hooks/useAtualizacaoAutomatica";
 
 import "./paginas/Dashboard/Dashboard.css";
 import "./paginas/Infraestrutura/Infraestrutura.css";
@@ -276,11 +277,7 @@ function MainInfraestrutura() {
 
 
 
-    useEffect(() => {
-
-        let ativo = true;
-
-        const carregarInfraestrutura = async () => {
+    const carregarInfraestrutura = useCallback(async () => {
 
             setCarregando(true);
             setErro("");
@@ -293,8 +290,6 @@ function MainInfraestrutura() {
                         buscarLista("/relacionamentos"),
                         buscarLista("/analises")
                     ]);
-
-                if (!ativo) return;
 
                 if (respComponentes.status === "rejected") {
                     throw respComponentes.reason;
@@ -313,8 +308,6 @@ function MainInfraestrutura() {
 
             } catch (error) {
 
-                if (!ativo) return;
-
                 setErro(
                     mensagemDeErro(
                         error,
@@ -324,20 +317,15 @@ function MainInfraestrutura() {
 
             } finally {
 
-                if (ativo) setCarregando(false);
-
+                setCarregando(false);
             }
+    }, []);
 
-        };
-
+    useEffect(() => {
         carregarInfraestrutura();
+    }, [carregarInfraestrutura, tentativa]);
 
-        return () => {
-            ativo = false;
-        };
-
-    }, [tentativa]);
-
+    useAtualizacaoAutomatica(carregarInfraestrutura);
 
 
     const layout = useMemo(

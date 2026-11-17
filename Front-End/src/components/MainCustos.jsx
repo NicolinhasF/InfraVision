@@ -1,6 +1,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import api from "../services/api";
+import useAtualizacaoAutomatica from "../hooks/useAtualizacaoAutomatica";
 
 function formatarMoeda(valor) {
     return Number(valor || 0).toLocaleString("pt-BR", {
@@ -50,6 +51,8 @@ function MainCustos() {
     useEffect(() => {
         carregarCustos();
     }, [carregarCustos]);
+
+    useAtualizacaoAutomatica(carregarCustos);
 
     const custoTotal = custos.reduce(
         (total, item) => total + Number(item.custo_total || 0),

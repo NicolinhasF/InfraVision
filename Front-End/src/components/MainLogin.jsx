@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../services/api";
 
 import "./paginas/Login/Login.css";
 
@@ -19,13 +19,10 @@ function MainLogin() {
 
         try {
 
-            const response = await axios.post(
-                "http://localhost:3001/login",
-                {
-                    usuario,
-                    senha
-                }
-            );
+            const response = await api.post("/login", {
+                usuario,
+                senha
+            });
 
             if (response.status === 200) {
                 sessionStorage.setItem("usuarioId", response.data.id);

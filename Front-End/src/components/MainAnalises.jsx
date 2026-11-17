@@ -9,6 +9,7 @@ import {
     YAxis,
 } from "recharts";
 import api from "../services/api";
+import useAtualizacaoAutomatica from "../hooks/useAtualizacaoAutomatica";
 
 const CAMPOS_PERCENTUAIS = [
     { campo: "cpu_percent", nome: "CPU" },
@@ -97,6 +98,8 @@ function MainAnalises() {
     useEffect(() => {
         carregarDados();
     }, [carregarDados]);
+
+    useAtualizacaoAutomatica(carregarDados);
 
     const metricasAtuais = useMemo(() => obterUltimasMetricas(metricas), [metricas]);
 

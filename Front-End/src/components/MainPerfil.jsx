@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import api from "../services/api";
 import "./paginas/Dashboard/Dashboard.css";
 import "./paginas/Perfil/Perfil.css";
 
@@ -39,7 +39,7 @@ function MainPerfil() {
     const carregarPerfil = async () => {
       try {
         const [respostaPerfil, fotoSalva] = await Promise.all([
-          axios.get(`http://localhost:3001/perfil/${usuarioId}`),
+          api.get(`/perfil/${usuarioId}`),
           Promise.resolve(
             localStorage.getItem(`infravision:foto-perfil:${usuarioId}`),
           ),
@@ -143,7 +143,7 @@ function MainPerfil() {
     setSalvando(true);
 
     try {
-      await axios.put(`http://localhost:3001/perfil/${usuarioId}`, dadosEdicao);
+      await api.put(`/perfil/${usuarioId}`, dadosEdicao);
       setUsuario((perfilAtual) => ({ ...perfilAtual, ...dadosEdicao }));
       setEditandoPerfil(false);
       setSucesso("Perfil atualizado com sucesso.");
@@ -178,8 +178,8 @@ function MainPerfil() {
     setSalvando(true);
 
     try {
-      const resposta = await axios.put(
-        `http://localhost:3001/perfil/${usuarioId}/senha`,
+      const resposta = await api.put(
+        `/perfil/${usuarioId}/senha`,
         senhas,
       );
       setAlterandoSenha(false);

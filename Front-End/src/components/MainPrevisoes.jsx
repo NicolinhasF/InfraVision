@@ -9,6 +9,7 @@ import {
     YAxis,
 } from "recharts";
 import api from "../services/api";
+import useAtualizacaoAutomatica from "../hooks/useAtualizacaoAutomatica";
 
 const METRICAS = [
     { campo: "cpu_percent", nome: "CPU", unidade: "%", percentual: true },
@@ -61,7 +62,7 @@ function MainPrevisoes() {
     const [respostaIa, setRespostaIa] = useState("");
     const [erroIa, setErroIa] = useState("");
 
-    const carregarDados = useCallback(async () => {
+    const carregarDados = useCallback(async (gerarPrevisoes = true) => {
         setCarregando(true);
         setErro("");
 
@@ -71,7 +72,9 @@ function MainPrevisoes() {
                 api.get("/metricas"),
             ]);
 
-            await api.post("/previsoes/gerar");
+            if (gerarPrevisoes) {
+                await api.post("/previsoes/gerar");
+            }
             const respostaPrevisoes = await api.get("/previsoes");
 
             const listaComponentes = Array.isArray(respostaComponentes.data?.dados)
@@ -97,9 +100,19 @@ function MainPrevisoes() {
             );
 
             const componenteInicial = primeiraPrevisao?.componente?.id ?? servidores[0]?.id ?? "";
-            setComponenteId(componenteInicial === "" ? "" : String(componenteInicial));
+            setComponenteId((atual) => {
+                if (atual && servidores.some((servidor) => String(servidor.id) === atual)) {
+                    return atual;
+                }
 
-            if (primeiraPrevisao?.metrica && METRICAS.some((item) => item.campo === primeiraPrevisao.metrica)) {
+                return componenteInicial === "" ? "" : String(componenteInicial);
+            });
+
+            if (
+                gerarPrevisoes &&
+                primeiraPrevisao?.metrica &&
+                METRICAS.some((item) => item.campo === primeiraPrevisao.metrica)
+            ) {
                 setMetricaSelecionada(primeiraPrevisao.metrica);
             }
         } catch (error) {
@@ -115,6 +128,8 @@ function MainPrevisoes() {
     useEffect(() => {
         carregarDados();
     }, [carregarDados]);
+
+    useAtualizacaoAutomatica(() => carregarDados(false));
 
     const componenteSelecionado = componentes.find((item) => String(item.id) === String(componenteId));
     const metrica = METRICAS.find((item) => item.campo === metricaSelecionada) || METRICAS[0];
